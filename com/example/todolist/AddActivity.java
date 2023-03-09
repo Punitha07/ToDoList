@@ -1,0 +1,57 @@
+package com.example.todolist;
+
+import androidx.appcompat.app.AppCompatActivity;
+import io.realm.Realm;
+import todolist.R;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.material.button.MaterialButton;
+
+public class AddActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add);
+
+        EditText titleInput = findViewById(R.id.titleinput);
+        EditText descriptionInput = findViewById(R.id.descriptioninput);
+        EditText startInput = findViewById(R.id.startinput);
+        EditText endInput = findViewById(R.id.endinput);
+        MaterialButton saveBtn = findViewById(R.id.savebtn);
+
+
+        Realm.init(getApplicationContext());
+        Realm realm = Realm.getDefaultInstance();
+
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String title = titleInput.getText().toString();
+                String description = descriptionInput.getText().toString();
+               String started = startInput.getText().toString();
+                String ended = endInput.getText().toString();
+                long createdTime = System.currentTimeMillis();
+
+                realm.beginTransaction();
+                Todo todo = realm.createObject(Todo.class);
+                todo.setTitle(title);
+                todo.setDescription(description);
+               todo.setTitle(started);
+               todo.setTitle(ended);
+                todo.setCreatedTime(createdTime);
+                realm.commitTransaction();
+                Toast.makeText(getApplicationContext(),"Todo saved",Toast.LENGTH_SHORT).show();
+                finish();
+
+
+            }
+        });
+
+
+    }
+}
